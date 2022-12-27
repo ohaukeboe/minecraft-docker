@@ -42,6 +42,7 @@ ENV PREVENT_PROXY_CONNECTION false
 EXPOSE 25565
 
 RUN mkdir /minecraft && \
+    mkdir /minecraft/config && \
     apt-get update && apt-get install -y libfreetype6 curl wget python3 python3-wget && \
     useradd -rUm -u 966 minecraft && \
     chown -Rh minecraft:minecraft /minecraft
