@@ -1,5 +1,5 @@
 
-FROM openjdk:17-slim
+FROM openjdk:8-slim
 
 # Set defaults for environment variables
 ENV MINECRAFT_PORT 25565
@@ -50,7 +50,7 @@ RUN mkdir /minecraft && \
 
 # Setup the server
 RUN curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
-    java -jar /minecraft/installer.jar --installServer
+    cd /minecraft; java -jar /minecraft/installer.jar --installServer
 
 USER minecraft
 
