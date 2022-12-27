@@ -1,14 +1,9 @@
 
 FROM openjdk:17-slim
 
-WORKDIR /minecraft
-
-
 # Set defaults for environment variables
 ENV MINECRAFT_PORT 25565
-ENV RCON_PORT 27015
 ENV JAVA_MEMORY 1G
-ENV RCON_ENABLED false
 ENV WHITELIST_ENABLED true
 ENV ALLOW_NETHER true
 ENV GAME_MODE survival
@@ -34,7 +29,7 @@ ENV MAX_PLAYERS 10
 ENV NETWORK_COMPRESSION_THRESHOLD 256
 #ENV RESOURCE_PACK_SHA1
 ENV MAX_WORLD_SIZE 29999984
-#ENV SERVER_IP
+ENV SERVER_IP 127.0.0.1
 ENV ALLOW_FLIGHT true
 ENV LEVEL_NAME world
 ENV VIEW_DISTANCE 10
@@ -46,18 +41,20 @@ ENV PREVENT_PROXY_CONNECTION false
 
 EXPOSE 25565
 
-RUN apt-get update && apt-get install -y libfreetype6 curl wget python3 python3-wget && \
-    # Install rcon
-    curl -L -o rcon-cli.tar.gz https://github.com/itzg/rcon-cli/releases/download/1.5.1/rcon-cli_1.5.1_linux_amd64.tar.gz && \
-    tar -xzf rcon-cli.tar.gz && \
-    rm rcon-cli.tar.gz && \
-    mv rcon-cli /usr/local/bin && \
-    # Setup the server
-    curl -L -o fabric-installer.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.11.1/fabric-installer-0.11.1.jar && \
-    java -jar fabric-installer.jar server -downloadMinecraft -mcversion 1.16.5 && \
-    useradd minecraft
+RUN mkdir /minecraft && \
+    apt-get update && apt-get install -y libfreetype6 curl wget python3 python3-wget && \
+    useradd -rUm -u 966 minecraft && \
+    chown -Rh minecraft:minecraft /minecraft
+
+
+
+# Setup the server
+RUN curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
+    java -jar /minecraft/installer.jar --installServer
 
 USER minecraft
+
+WORKDIR /minecraft
 
 # Copy the signed eula
 COPY --chown=minecraft:minecraft ./eula.txt eula.txt
@@ -67,4 +64,4 @@ COPY --chown=minecraft:minecraft ./entrypoint.py entrypoint.py
 COPY --chown=minecraft:minecraft ./server.properties server.properties
 
 
-ENTRYPOINT [ "./entrypoint.py" ]
+#ENTRYPOINT [ "./entrypoint.py" ]

@@ -56,6 +56,6 @@ if not os.path.exists('/minecraft/config/whitelist.json'):
 os.symlink('/minecraft/config/usercache.json', '/minecraft/usercache.json')
 os.symlink('/minecraft/config/whitelist.json', '/minecraft/whitelist.json')
 os.symlink('/minecraft/config/ops.json', '/minecraft/ops.json')
-os.system('echo \"$(cat /server.properties)\" > /minecraft/server.properties')
+os.system('"echo \\"$(cat /minecraft/server.properties)\\""> /minecraft/server.properties')
 
 os.system('java -cp /minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar fabric-server-launch.jar nogui')

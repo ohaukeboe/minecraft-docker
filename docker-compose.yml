@@ -1,4 +1,10 @@
-version: 3.9
+version: "3.9"
 services:
   minecraft:
-    build:
+    build: "img/"
+    ports:
+      - "0.0.0.0:25565:25565"
+    #user: "${MUID}:${MGID}"
+    env_file:
+      - ".env"
+    entrypoint: "./entrypoint.py"
