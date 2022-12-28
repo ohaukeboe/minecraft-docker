@@ -43,12 +43,13 @@ EXPOSE 25565
 
 RUN mkdir /minecraft && \
     mkdir /minecraft/config /minecraft/mods /minecraft/world && \
+    # Upgrade and install server
     apt-get update && apt-get install -y libfreetype6 curl wget python3 python3-wget && \
-    useradd -rUm -u 966 minecraft && \
-    chown -Rh minecraft:minecraft /minecraft && \
-    # Setup the server
     curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
-    cd /minecraft; java -jar /minecraft/installer.jar --installServer
+    cd /minecraft; java -jar /minecraft/installer.jar --installServer && \
+    # Make user and give permission
+    useradd -rUm -u 966 minecraft && \
+    chown -Rh minecraft:minecraft /minecraft
 
 USER minecraft
 
@@ -57,9 +58,6 @@ WORKDIR /minecraft
 # Copy the signed eula
 COPY --chown=minecraft:minecraft ./eula.txt eula.txt
 
-# Add the entrypoint
+# Copy the entrypoint
 COPY --chown=minecraft:minecraft ./entrypoint.py entrypoint.py
 COPY --chown=minecraft:minecraft ./server.properties server.properties
-
-
-#ENTRYPOINT [ "./entrypoint.py" ]
