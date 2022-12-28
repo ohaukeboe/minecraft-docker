@@ -8,6 +8,23 @@ bkup = os.environ.get('WORLD_BACKUP')
 mods = os.environ.get('MODS_BACKUP')
 plug = os.environ.get('PLUGINS_BACKUP')
 
+lines = open('/minecraft/properties', 'r').readlines()
+serverProperties = open('/minecraft/server.properties', 'w')
+
+for line in lines:
+    line, val = line.strip('\n').split('=')
+    if not line[0]=='#':
+        environ = os.environ.get(line.upper().replace('-', '_'))
+        if not environ:
+            environ = val
+
+        newLine = line+'='+environ
+        serverProperties.write(newLine+'\n')
+    else:
+        serverProperties.write(line+'\n')
+
+serverProperties.close()
+
 # Add default world
 if bkup:
     if not os.path.exists('/minecraft/world'):
@@ -59,7 +76,5 @@ if not os.path.exists('/minecraft/whitelist.json'):
     os.symlink('/minecraft/config/whitelist.json', '/minecraft/whitelist.json')
 if not os.path.exists('/minecraft/ops.json'):
     os.symlink('/minecraft/config/ops.json', '/minecraft/ops.json')
-    
-os.system('"echo \\"$(cat /minecraft/server.properties)\\""> /minecraft/server.properties')
 
 os.system('java -cp /minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar forge-*.jar nogui')

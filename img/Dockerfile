@@ -3,7 +3,7 @@ FROM openjdk:8-slim
 
 # Set defaults for environment variables
 ENV MINECRAFT_PORT 25565
-ENV JAVA_MEMORY 1G
+ENV JAVA_MEMORY 2G
 ENV WHITELIST_ENABLED true
 ENV ALLOW_NETHER true
 ENV GAME_MODE survival
@@ -60,4 +60,4 @@ COPY --chown=minecraft:minecraft ./eula.txt eula.txt
 
 # Copy the entrypoint
 COPY --chown=minecraft:minecraft ./entrypoint.py entrypoint.py
-COPY --chown=minecraft:minecraft ./server.properties server.properties
+COPY --chown=minecraft:minecraft ./properties properties
