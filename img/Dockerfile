@@ -48,7 +48,7 @@ RUN mkdir /minecraft && \
     curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
     cd /minecraft; java -jar /minecraft/installer.jar --installServer && \
     # Make user and give permission
-    useradd -rUm -u 966 minecraft && \
+    useradd -rUm -u 969 minecraft && \
     chown -Rh minecraft:minecraft /minecraft
 
 USER minecraft
