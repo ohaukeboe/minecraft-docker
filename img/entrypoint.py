@@ -55,8 +55,11 @@ if not os.path.exists('/minecraft/config/whitelist.json'):
 
 if not os.path.exists('/minecraft/usercache.json'):
     os.symlink('/minecraft/config/usercache.json', '/minecraft/usercache.json')
+if not os.path.exists('/minecraft/whitelist.json'):
     os.symlink('/minecraft/config/whitelist.json', '/minecraft/whitelist.json')
+if not os.path.exists('/minecraft/ops.json'):
     os.symlink('/minecraft/config/ops.json', '/minecraft/ops.json')
-    os.system('"echo \\"$(cat /minecraft/server.properties)\\""> /minecraft/server.properties')
+    
+os.system('"echo \\"$(cat /minecraft/server.properties)\\""> /minecraft/server.properties')
 
 os.system('java -cp /minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar forge-*.jar nogui')
