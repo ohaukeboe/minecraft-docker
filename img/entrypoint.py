@@ -12,13 +12,14 @@ lines = open('/minecraft/properties', 'r').readlines()
 serverProperties = open('/minecraft/server.properties', 'w')
 
 for line in lines:
-    line, val = line.strip('\n').split('=')
+    line = line.strip('\n')
     if not line[0]=='#':
-        environ = os.environ.get(line.upper().replace('-', '_'))
+        line = line.split('=')
+        environ = os.environ.get(line[0].upper().replace('-', '_'))
         if not environ:
-            environ = val
+            environ = line[1]
 
-        newLine = line+'='+environ
+        newLine = line[0]+'='+environ
         serverProperties.write(newLine+'\n')
     else:
         serverProperties.write(line+'\n')
