@@ -42,15 +42,12 @@ ENV PREVENT_PROXY_CONNECTION false
 EXPOSE 25565
 
 RUN mkdir /minecraft && \
-    mkdir /minecraft/config && \
+    mkdir /minecraft/config /minecraft/mods /minecraft/world && \
     apt-get update && apt-get install -y libfreetype6 curl wget python3 python3-wget && \
     useradd -rUm -u 966 minecraft && \
-    chown -Rh minecraft:minecraft /minecraft
-
-
-
-# Setup the server
-RUN curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
+    chown -Rh minecraft:minecraft /minecraft && \
+    # Setup the server
+    curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
     cd /minecraft; java -jar /minecraft/installer.jar --installServer
 
 USER minecraft
