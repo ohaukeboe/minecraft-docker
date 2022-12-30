@@ -1,15 +1,18 @@
 version: "3.9"
 services:
   minecraft:
-    image: quteraz/minecraft-forge:beta
+    image: quteraz/minecraft-forge:1.16.5-local
     ports:
       - "0.0.0.0:25565:25565"
     entrypoint: "./entrypoint.py"
-    user: "966:965"
     volumes:
       - type: volume
         target: /minecraft/config
         source: minecraft_config
+      - type: volume
+        target: /minecraft/mods
+        source: minecraft_mods
 
 volumes:
   minecraft_config:
+  minecraft_mods:
