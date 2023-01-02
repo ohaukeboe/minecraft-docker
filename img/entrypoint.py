@@ -58,7 +58,7 @@ if not os.path.exists("/minecraft/ops.json"):
     os.symlink("/minecraft/config/ops.json", "/minecraft/ops.json")
 
 verbosePrint("Starting minecraft server")
-server_start_cmd = "java -cp /minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar forge-*.jar nogui"
+server_start_cmd = "java -cp /minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar fabric-server-mc.*.jar nogui"
 process = sb.Popen(server_start_cmd, stdin=sb.PIPE, shell=True)
 
 
@@ -97,15 +97,28 @@ def start():
     backup_process.start()
     return (process, backup_process)
 
+def whitelist(task):
+    mc_comm = process.stdin.write("whitelist {name}\n".format(task["name"]).encode())
+    process.stdin.flush()
+
+def op(task):
+    mc_comm = process.stdin.write("op {name}\n".format(task["name"]).encode())
+    process.stdin.flush()
 
 async def restore(websocket, path):
     async for task in websocket:
         verbosePrint(task)
-        if task == "stop":
-            stop()
-        elif task == "start":
-            start()
-        await websocket.send("ack")
+        ret = "ack"
+        match task["task"]:
+            case "stop":
+                stop(task)
+            case "start":
+                start(task)
+            case "whitelist":
+                whitelist(task)
+            case "op":
+                op(task)
+        await websocket.send(ret)
 
 
 async def startSocket():

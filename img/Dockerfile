@@ -1,5 +1,5 @@
 
-FROM openjdk:8-slim
+FROM openjdk:17-slim
 
 # Set defaults for environment variables
 ENV MINECRAFT_PORT 25565
@@ -47,31 +47,16 @@ EXPOSE 25565
 RUN mkdir /minecraft && \
     mkdir /minecraft/config /minecraft/mods /minecraft/world && \
     # Upgrade and install server
-    apt-get update && apt-get install -y libfreetype6 vim cron curl wget python3 python3-wget python3-websockets && \
-    curl -L -o /minecraft/installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar && \
-    cd /minecraft; java -jar /minecraft/installer.jar --installServer && \
+    apt-get update && apt-get install -y libfreetype6 vim curl wget python3 python3-wget python3-websockets && \
+    cd /minecraft; curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar && \
     # Make user and give permission
     useradd -rUm -u 969 minecraft && \
     chown -Rh minecraft:minecraft /minecraft
 
-COPY ./crontab /etc/cron.d/crontab
-
-RUN chmod 0644 /etc/cron.d/crontab && \
-    crontab -u minecraft /etc/cron.d/crontab && \
-    chmod u+s /usr/sbin/cron
+WORKDIR /minecraft
 
 USER minecraft
 
-WORKDIR /minecraft
+COPY --chown=minecraft:minecraft ./* ./
 
-# Copy the signed eula
-COPY --chown=minecraft:minecraft ./eula.txt eula.txt
-
-# Copy backup scripts
-COPY --chown=minecraft:minecraft ./backup.py backup.py
-COPY --chown=minecraft:minecraft ./restore.py restore.py
-
-# Copy the entrypoint
-COPY --chown=minecraft:minecraft ./entrypoint.py entrypoint.py
-COPY --chown=minecraft:minecraft ./properties properties
 

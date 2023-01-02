@@ -19,18 +19,17 @@ if not os.path.exists(filename):
     print("No backup found for", backup_date)
     exit()
 
-
-async def send():
+async def send(backup_type, backup_date):
     uri = "ws://127.0.0.1:18080"
     async with ws.connect(uri) as websocket:
-        await websocket.send("stop")
+        await websocket.send({"task" : "stop", "type": backup_type, "date": backup_date})
         await websocket.recv()
         print("Restoring...")
         sh.rmtree("/minecraft/" + backup_type, ignore_errors=True)
         sh.unpack_archive(filename, "/minecraft")
-        await websocket.send("start")
+        await websocket.send({"task" : "start", "type": backup_type, "date": backup_date})
         await websocket.recv()
         print("Done restoring")
 
 
-asy.run(send())
+asy.run(send(backup_type, backup_date))
