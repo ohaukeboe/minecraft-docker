@@ -44,19 +44,19 @@ ENV VERBOSE True
 
 EXPOSE 25565
 
-RUN mkdir /minecraft && \
-    mkdir /minecraft/config /minecraft/mods /minecraft/world && \
+RUN mkdir /app && \
+    mkdir /app/config /app/minecraft/ /app/minecraft/mods /app/minecraft/world /app/minecraft/config && \
     # Upgrade and install server
     apt-get update && apt-get install -y libfreetype6 vim curl wget python3 python3-wget python3-websockets && \
-    cd /minecraft; curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar && \
+    cd /app/minecraft; curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar && \
     # Make user and give permission
     useradd -rUm -u 969 minecraft && \
-    chown -Rh minecraft:minecraft /minecraft
+    chown -Rh minecraft:minecraft /app
 
-WORKDIR /minecraft
+WORKDIR /app/minecraft
 
 USER minecraft
 
-COPY --chown=minecraft:minecraft ./* ./
+COPY --chown=minecraft:minecraft ./ ./
 
 
