@@ -16,4 +16,4 @@ for category in backup_categories:
 
     while len(backups) > int(os.environ.get('BACKUP_LENGTH')):
         oldest = min(backups, key=os.path.getctime)
-        os.remove(base_path + oldest)
+        os.remove(base_path + category + oldest)
