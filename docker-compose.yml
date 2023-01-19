@@ -1,18 +1,23 @@
 version: "3.9"
 services:
   minecraft:
+    build: ./img
     image: quteraz/minecraft-fabric:1.19.3-beta
     ports:
       - "0.0.0.0:25565:25565"
     entrypoint: "./entrypoint.py"
     volumes:
       - type: volume
-        target: /minecraft/config
-        source: minecraft_config
+        target: /app/minecraft/config
+        source: minecraft_mod_config
       - type: volume
-        target: /minecraft/mods
+        target: /app/minecraft/mods
         source: minecraft_mods
+      - type: volume
+        target: /app/config 
+        source: minecraft_config
 
 volumes:
   minecraft_config:
   minecraft_mods:
+  minecraft_mod_config:
