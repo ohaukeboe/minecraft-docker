@@ -104,12 +104,8 @@ def start():
     backup_process.start()
     return (process, backup_process)
 
-def whitelist(task):
-    mc_comm = process.stdin.write("whitelist {name}\n".format(task["name"]).encode())
-    process.stdin.flush()
-
-def op(task):
-    mc_comm = process.stdin.write("op {name}\n".format(task["name"]).encode())
+def addPrivilege(task):
+    mc_comm = process.stdin.write("{task} {name}\n".format(task = task['task'], name = task['name']).encode())
     process.stdin.flush()
 
 async def restore(websocket, path):
@@ -118,13 +114,16 @@ async def restore(websocket, path):
         task = json.loads(task)
         ret = "ack"
         if (task['task'] == "stop"):
-                stop(task)
+            stop(task)
         elif (task['task'] == "start"):
-                start(task)
+            start(task)
         elif (task['task'] == "whitelist"):
-                whitelist(task)
+            task['task'] = "whitelist add"
+            addPrivilege(task)
         elif (task['task'] == "op"):
-                op(task)
+            addPrivilege(task)
+        else:
+            print ("no valid task")
         await websocket.send(ret)
 
 
