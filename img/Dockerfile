@@ -1,5 +1,9 @@
+# args to determine versions
+ARG BASE_IMAGE=openjdk:17-slim
+ARG MOD_LOADER=fabric
+ARG LOADER_LINK=https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar
 
-FROM openjdk:17-slim
+FROM ${BASE_IMAGE}
 
 # Set defaults for environment variables
 ENV MINECRAFT_PORT 25565
@@ -44,11 +48,14 @@ ENV VERBOSE True
 
 EXPOSE 25565
 
+COPY setup.sh ./
+
 RUN mkdir /app && \
     mkdir /app/config /app/minecraft/ /app/minecraft/mods /app/minecraft/world /app/minecraft/config && \
     # Upgrade and install server
     apt-get update && apt-get install -y libfreetype6 vim curl wget python3 python3-wget python3-websockets && \
-    cd /app/minecraft; curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar && \
+    chmod +x /setup.sh; ./setup.sh && \
+    rm setup.sh && \
     # Make user and give permission
     useradd -rUm -u 969 minecraft && \
     chown -Rh minecraft:minecraft /app
@@ -57,6 +64,4 @@ WORKDIR /app/minecraft
 
 USER minecraft
 
-COPY --chown=minecraft:minecraft ./ ./
-
-
+COPY --chown=minecraft:minecraft ./files/ ./
