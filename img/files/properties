@@ -50,3 +50,4 @@ text-filtering-config=
 use-native-transport=true
 view-distance=10
 white-list=true
+simulation-distance=10

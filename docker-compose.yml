@@ -1,7 +1,13 @@
 version: "3.9"
 services:
   minecraft:
-    build: ./img
+    build: 
+      context: ./img
+      args:
+        - USER_ID=969
+        - BASE_IMAGE=openjdk:17-slim
+        - MOD_LOADER=fabric
+        - LOADER_LINK=https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar
     image: quteraz/minecraft-fabric:1.19.3-beta
     ports:
       - "0.0.0.0:25565:25565"
