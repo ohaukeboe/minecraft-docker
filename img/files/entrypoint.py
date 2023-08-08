@@ -1,6 +1,7 @@
 #!/usr/bin/python3.9
 
 import os
+import re
 import tarfile
 import shutil
 import time
@@ -24,7 +25,7 @@ serverProperties = open("/app/minecraft/server.properties", "w")
 verbose_print("Generating server.properties")
 for line in lines:
     line = line.strip("\n")
-    if not line[0] == "#":
+    if line[0] != "#":
         line = line.split("=")
         verbose_print("Looking for: " + line[0].upper().replace("-", "_"))
         environ = os.environ.get(line[0].upper().replace("-", "_"))
@@ -65,7 +66,14 @@ if not os.path.exists("/app/minecraft/ops.json"):
     os.symlink("/app/config/ops.json", "/app/minecraft/ops.json")
 
 verbose_print("Starting minecraft server")
-server_start_cmd = "java -cp /app/minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar fabric-server-mc.*.jar nogui"
+
+executable = os.listdir("/app/minecraft")
+verbose_print(executable)
+regex = re.compile("forge-*.jar|fabric-server-mc.*.jar")
+executable = list(filter(regex.match, executable))
+verbose_print(executable)
+
+server_start_cmd = "java -cp /app/minecraft -Xmx${JAVA_MEMORY} -Xms${JAVA_MEMORY} -Dfml.queryResult=confirm -jar " + executable[0] + " nogui"
 process = sb.Popen(server_start_cmd, stdin=sb.PIPE, shell=True)
 
 
