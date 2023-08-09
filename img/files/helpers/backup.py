@@ -18,10 +18,12 @@ for category in backup_categories:
 
     sh.make_archive(base_name, 'gztar', '/app/minecraft/', category)
 
-    backups = os.walk(base_path + category)
+    backups = os.listdir(base_path + category)
+    backups = [base_path+category+file for file in backups]
     verbose_print(backups)
 
     while len(backups) > int(os.environ.get('BACKUP_LENGTH')):
         oldest = min(backups, key=os.path.getctime)
-        os.remove(base_path + category + oldest)
+        os.remove(oldest)
+        backups.remove(oldest)
     verbose_print('Backup complete')
