@@ -1,14 +1,13 @@
 version: "3.9"
 services:
   minecraft_fabric:
-    build: 
+    build:
       context: ./img
       args:
         - USER_ID=969
         - BASE_IMAGE=openjdk:17-slim
         - MOD_LOADER=fabric
-        - LOADER_LINK=https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.12/0.11.1/server/jar
-    image: quteraz/minecraft-fabric:1.19.3-beta
+    image: quteraz/minecraft-fabric:1.20.4-beta
     container_name: minecraft_fabric
     ports:
       - "0.0.0.0:25565:25565"
@@ -21,36 +20,36 @@ services:
         target: /app/minecraft/mods
         source: minecraft_mods
       - type: volume
-        target: /app/config 
+        target: /app/config
         source: minecraft_config
-  minecraft_curse:
-    build: 
+  minecraft_forge:
+    build:
       context: ./img
       args:
         - USER_ID=969
-        - BASE_IMAGE=openjdk:8-slim
-        - MOD_LOADER=curse
-        - LOADER_LINK=https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar
-    image: quteraz/minecraft-curse:1.16.5-beta
-    container_name: minecraft_curse
+        - BASE_IMAGE=openjdk:17-slim
+        - MOD_LOADER=forge
+        - LOADER_LINK=https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.4-49.0.11/forge-1.20.4-49.0.11-installer.jar
+    image: quteraz/minecraft-forge:1.20.4-beta
+    container_name: minecraft_forge
     ports:
       - "0.0.0.0:25565:25565"
     entrypoint: "./entrypoint.py"
     volumes:
       - type: volume
         target: /app/minecraft/config
-        source: minecraft_curse_mod_config
+        source: minecraft_forge_mod_config
       - type: volume
         target: /app/minecraft/mods
-        source: minecraft_curse_mods
+        source: minecraft_forge_mods
       - type: volume
-        target: /app/config 
-        source: minecraft_curse_config
+        target: /app/config
+        source: minecraft_forge_config
 
 volumes:
   minecraft_config:
   minecraft_mods:
   minecraft_mod_config:
-  minecraft_curse_config:
-  minecraft_curse_mods:
-  minecraft_curse_mod_config:
+  minecraft_forge_config:
+  minecraft_forge_mods:
+  minecraft_forge_mod_config:

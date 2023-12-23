@@ -45,7 +45,7 @@ ENV VERBOSE True
 
 EXPOSE 25565
 
-COPY setup.sh ./
+COPY setup.py ./
 
 ARG MOD_LOADER
 ARG LOADER_LINK
@@ -54,9 +54,10 @@ ARG USER_ID
 RUN mkdir /app && \
     mkdir /app/config /app/minecraft/ /app/minecraft/mods /app/minecraft/world /app/minecraft/config && \
     # Upgrade and install server
-    apt-get update && apt-get install -y libfreetype6 vim curl wget python3 python3-wget python3-websockets && \
-    chmod +x /setup.sh; ./setup.sh && \
-    # rm setup.sh && \
+    apt-get update && apt-get install -y libfreetype6 vim curl wget python3 python3-requests python3-wget python3-websockets && \
+    python3 ./setup.py && \
+    # chmod +x ./setup.py; ./setup.py && \
+    rm setup.py && \
     # Make user and give permission
     useradd -rUm -u ${USER_ID} minecraft && \
     chown -Rh minecraft:minecraft /app

@@ -69,7 +69,7 @@ verbose_print("Starting minecraft server")
 
 executable = os.listdir("/app/minecraft")
 verbose_print(executable)
-regex = re.compile("forge-*.jar|fabric-server-mc.*.jar")
+regex = re.compile("forge-.*\.jar|fabric-server-launch.jar")
 executable = list(filter(regex.match, executable))
 verbose_print(executable)
 
