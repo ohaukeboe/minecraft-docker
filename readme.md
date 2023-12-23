@@ -101,6 +101,7 @@ docker-compose up -d
 The following environment variables can be used to configure your Minecraft server.
 
 | Environment Variable          | Default  | Description                                                                                                               |
+| ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
 | MINECRAFT_PORT                | 25565    | The port the server runs on.                                                                                              |
 | JAVA_MEMORY                   | 2G       | The amount of memory allocated to the server.                                                                             |
 | WHITELIST_ENABLED             | true     | Whether or not the server uses a whitelist.                                                                               |
