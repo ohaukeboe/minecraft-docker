@@ -44,3 +44,5 @@ if __name__ == "__main__":
         _fabric(minecraft_version)
     elif os.environ["MOD_LOADER"] == "forge":
         _forge()
+    else:
+        print("Invalid mod loader")

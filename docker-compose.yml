@@ -1,16 +1,17 @@
-version: "3.9"
 services:
   minecraft_fabric:
     build:
       context: ./img
       args:
         - USER_ID=969
-        - BASE_IMAGE=openjdk:17-slim
+        - JAVA_VER=22
         - MOD_LOADER=fabric
-    image: quteraz/minecraft-fabric:1.20.4-beta
+    image: quteraz/minecraft-fabric:1.21.4-beta
     container_name: minecraft_fabric
     ports:
       - "0.0.0.0:25565:25565"
+    networks:
+      - frontend
     entrypoint: "./entrypoint.py"
     volumes:
       - type: volume
@@ -27,7 +28,7 @@ services:
       context: ./img
       args:
         - USER_ID=969
-        - BASE_IMAGE=openjdk:17-slim
+        - JAVA_VER=17
         - MOD_LOADER=forge
         - LOADER_LINK=https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.4-49.0.11/forge-1.20.4-49.0.11-installer.jar
     image: quteraz/minecraft-forge:1.20.4-beta
@@ -53,3 +54,7 @@ volumes:
   minecraft_forge_config:
   minecraft_forge_mods:
   minecraft_forge_mod_config:
+
+networks:
+      frontend:
+        driver: bridge
